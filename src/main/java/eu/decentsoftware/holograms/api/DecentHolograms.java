@@ -102,6 +102,7 @@ public final class DecentHolograms {
 		}
 
 		BungeeUtils.destroy();
+		DExecutor.term();
 	}
 
 	public void reload() {

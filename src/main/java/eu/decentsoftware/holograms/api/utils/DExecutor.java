@@ -13,15 +13,25 @@ public class DExecutor {
     private static ExecutorService service;
     private static int threadId;
 
+
     /**
      * Initialize DExecutor. This method will set up ExecutorService for DecentHolograms.
+     * Deprecated because thread count is no longer applicable parameter.
      *
      * @param threads The amount of threads in the service.
      */
+    @Deprecated
     public static void init(int threads) {
+        DExecutor.init();
+    }
+
+    /**
+     * Initialize DExecutor. This method will set up ExecutorService for DecentHolograms.
+     */
+    public static void init() {
         if (initialized) return;
         threadId = 0;
-        service = Executors.newFixedThreadPool(threads, (runnable) -> {
+        service = Executors.newCachedThreadPool((runnable) -> {
             Thread thread = new Thread(runnable);
             thread.setName("DecentHolograms Thread #" + ++threadId);
             thread.setPriority(Thread.NORM_PRIORITY);
@@ -32,6 +42,13 @@ public class DExecutor {
             return thread;
         });
         initialized = true;
+    }
+
+    /**
+     * Terminate DExecutor.
+     */
+    public static void term() {
+        service.shutdown();
     }
 
     /**
